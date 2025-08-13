@@ -343,7 +343,7 @@
               <button 
                 mat-icon-button 
                 color="warn" 
-                (click)="options.update(opts => ({ ...opts, logoUrl: undefined }))"
+              (click)="removeLogo()"
               >
                 <mat-icon>close</mat-icon>
               </button>
@@ -382,14 +382,14 @@
 
         <mat-card-content>
           <div class="qr-preview">
-            <qr-code
+            <qrcode
               [qrdata]="previewData()"
               [width]="options().width || 256"
               [colorDark]="options().color || '#000000'"
               [colorLight]="options().bgColor || '#ffffff'"
               [errorCorrectionLevel]="options().errorCorrection || 'M'"
               [margin]="options().quietZone || 0"
-            ></qr-code>
+            ></qrcode>
 
             <div *ngIf="options().frameText" class="frame-text">
               {{ options().frameText }}
@@ -412,7 +412,7 @@
             <img 
               [src]="generatedImageDataUrl()" 
               [alt]="'Generated QR Code'"
-              [style.width.px]="Math.min(options().width || 256, 300)"
+              [style.width.px]="getImageWidth(options().width || 256, 300)"
             >
 
             <div *ngIf="generatedShortUrl()" class="short-url">

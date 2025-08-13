@@ -396,4 +396,12 @@ export class QRGeneratorComponent {
     link.click();
     document.body.removeChild(link);
   }
+
+  removeLogo(): void {
+    this.options.update(opts => ({ ...opts, logoUrl: undefined }));
+  }
+
+  getImageWidth(width: number, maxWidth: number): number {
+    return Math.min(width, maxWidth);
+  }
 }

@@ -1,2 +1,71 @@
 node_modules
 .env
+
+## Angular build outputs
+dist/
+tmp/
+out-tsc/
+.angular/
+.angular/cache/
+
+## Node and package manager logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+## IDEs and editors
+.idea/
+.project
+.classpath
+.settings/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Caches
+.npm/
+.eslintcache
+.cache/
+.sass-cache/
+.parcel-cache/
+
+## Test and coverage
+coverage/
+test-results/
+
+## E2E tools
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+
+## Storybook
+storybook-static/
+
+## Misc
+libpeerconnection.log
+connect.lock
+typings/
+
+## Dotenv variants
+.env.local
+.env.*.local
+!.env.example
+
+## Firebase
+.firebase/
+firebase-debug.log

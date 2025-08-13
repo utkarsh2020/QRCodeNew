@@ -81,6 +81,27 @@ import { FormValidators } from '../../core/validators/form.validators';
       border-radius: 4px;
       font-size: 0.875rem;
     }
+
+    .test-user-btn {
+      border-color: #00bcd4 !important;
+      color: #00bcd4 !important;
+    }
+
+    .test-user-info {
+      text-align: center;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      opacity: 0.7;
+    }
+
+    .test-user-info mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
   `]
 })
 export class AuthComponent {
@@ -173,5 +194,25 @@ export class AuthComponent {
     if (field.errors['mismatch']) return 'Passwords do not match';
 
     return 'Invalid input';
+  }
+
+  loginAsTestUser(): void {
+    this.error.set(null);
+    
+    // Create a test user session without API call
+    const testUser = {
+      id: 'test-user-001',
+      email: 'test@example.com',
+      createdAt: new Date().toISOString()
+    };
+    
+    const testToken = 'test-jwt-token-' + Date.now();
+    
+    // Set the test session
+    this.authService.setSession(testToken, testUser);
+    
+    // Redirect to dashboard
+    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.router.navigate([returnUrl]);
   }
 }

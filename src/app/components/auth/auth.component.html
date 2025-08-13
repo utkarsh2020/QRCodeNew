@@ -85,6 +85,26 @@
             }}
           </button>
 
+          <!-- Test User Button -->
+          <button 
+            type="button"
+            mat-stroked-button 
+            color="accent"
+            (click)="loginAsTestUser()"
+            [disabled]="authService.isLoading()"
+            class="w-full test-user-btn"
+          >
+            <mat-icon>person</mat-icon>
+            Continue as Test User
+          </button>
+
+          <div class="test-user-info">
+            <small class="text-gray-500">
+              <mat-icon>info</mat-icon>
+              Use test user to explore features without authentication
+            </small>
+          </div>
+
           <div class="auth-toggle">
             <p>
               {{ mode() === 'login' 

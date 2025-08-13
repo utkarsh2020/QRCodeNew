@@ -280,6 +280,15 @@ export class FileRedirectComponent {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('URL copied to clipboard');
+      // You could add a toast notification here
+    }).catch(err => {
+      console.error('Failed to copy URL: ', err);
+    });
+  }
+
   getFileIcon(file: File): string {
     const type = file.type;
     if (type.startsWith('image/')) return 'image';

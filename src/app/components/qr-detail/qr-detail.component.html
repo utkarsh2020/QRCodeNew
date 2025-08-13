@@ -11,7 +11,7 @@
     <div class="flex justify-between items-center mb-6">
       <div>
         <h1 class="text-3xl font-bold">
-          {{ qrItem()?.title || qrItem()?.type.toUpperCase() }}
+          {{ qrItem()?.title || qrItem()?.type?.toUpperCase() }}
         </h1>
         <p class="text-gray-600 mt-2">
           {{ qrItem()?.isDynamic ? 'Dynamic' : 'Static' }} QR Code • 
@@ -123,7 +123,7 @@
             <div class="space-y-3">
               <div class="flex justify-between">
                 <span class="font-medium">Type:</span>
-                <span>{{ qrItem()?.type.toUpperCase() }}</span>
+                <span>{{ qrItem()?.type?.toUpperCase() }}</span>
               </div>
 
               <div class="flex justify-between">
