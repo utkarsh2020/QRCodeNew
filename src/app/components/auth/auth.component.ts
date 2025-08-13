@@ -85,7 +85,7 @@ import { FormValidators } from '../../core/validators/form.validators';
 })
 export class AuthComponent {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
