@@ -297,7 +297,7 @@ export class QRGeneratorComponent {
   }
 
   download(format: 'png' | 'svg' | 'pdf' = 'png'): void {
-    const canvas = document.querySelector('qrcode canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('qr-code canvas') as HTMLCanvasElement;
     if (!canvas) return;
 
     if (format === 'png') {

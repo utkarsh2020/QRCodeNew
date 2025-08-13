@@ -382,14 +382,14 @@
 
         <mat-card-content>
           <div class="qr-preview">
-            <qrcode
+            <qr-code
               [qrdata]="previewData()"
               [width]="options().width || 256"
               [colorDark]="options().color || '#000000'"
               [colorLight]="options().bgColor || '#ffffff'"
               [errorCorrectionLevel]="options().errorCorrection || 'M'"
               [margin]="options().quietZone || 0"
-            ></qrcode>
+            ></qr-code>
 
             <div *ngIf="options().frameText" class="frame-text">
               {{ options().frameText }}
