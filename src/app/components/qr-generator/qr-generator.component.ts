@@ -217,6 +217,28 @@ export class QRGeneratorComponent {
     this.clearResults();
   }
 
+  clearLogo(): void {
+    this.options.update(opts => ({ ...opts, logoUrl: undefined }));
+  }
+
+  copyToClipboard(text: string): void {
+    if (!text) return;
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).catch(() => this.fallbackCopy(text));
+    } else {
+      this.fallbackCopy(text);
+    }
+  }
+
+  private fallbackCopy(text: string): void {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    try { document.execCommand('copy'); } catch {}
+    document.body.removeChild(textarea);
+  }
+
   async onLogoSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -297,7 +319,7 @@ export class QRGeneratorComponent {
   }
 
   download(format: 'png' | 'svg' | 'pdf' = 'png'): void {
-    const canvas = document.querySelector('qr-code canvas') as HTMLCanvasElement;
+    const canvas = document.querySelector('qrcode canvas') as HTMLCanvasElement;
     if (!canvas) return;
 
     if (format === 'png') {

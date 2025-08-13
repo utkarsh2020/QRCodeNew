@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/services/auth.service';
-import { ErrorMessagesComponent } from '../../shared/form/error-messages.component';
+// Removed unused ErrorMessagesComponent to silence NG8113 warning
 import { FormValidators } from '../../core/validators/form.validators';
 
 @Component({
@@ -24,7 +24,7 @@ import { FormValidators } from '../../core/validators/form.validators';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    ErrorMessagesComponent
+    // ErrorMessagesComponent
   ],
   templateUrl: './auth.component.html',
   styles: [`
@@ -85,7 +85,8 @@ import { FormValidators } from '../../core/validators/form.validators';
 })
 export class AuthComponent {
   private fb = inject(FormBuilder);
-  protected authService = inject(AuthService);
+  // Must be public for template access
+  authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
