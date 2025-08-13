@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -102,8 +102,9 @@ export class AuthComponent {
       confirmPassword: ['']
     });
 
-    // Add confirm password validator for registration
-    this.mode.subscribe(mode => {
+    // Add confirm password validator for registration using effect
+    effect(() => {
+      const mode = this.mode();
       const confirmPasswordControl = this.authForm.get('confirmPassword');
       if (mode === 'register') {
         confirmPasswordControl?.setValidators([

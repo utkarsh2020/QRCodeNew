@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
-import { BaseChartDirective } from 'ng2-charts';
+import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 
 import { QRService } from '../../core/services/qr.service';
@@ -27,7 +27,7 @@ import { AnalyticsSummary } from '../../core/models/analytics';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatMenuModule,
-    BaseChartDirective
+    NgChartsModule
   ],
   templateUrl: './dashboard.component.html',
   styles: [`
