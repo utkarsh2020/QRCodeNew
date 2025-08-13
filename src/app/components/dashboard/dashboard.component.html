@@ -131,7 +131,7 @@
     <mat-card>
       <mat-card-header>
         <mat-card-title>
-          Analytics: {{ selectedQR()?.title || selectedQR()?.type.toUpperCase() }}
+          Analytics: {{ selectedQR()?.title || selectedQR()?.type?.toUpperCase() }}
         </mat-card-title>
         <mat-card-subtitle>
           Total Scans: {{ analytics()?.totalScans }}
