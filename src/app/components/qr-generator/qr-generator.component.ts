@@ -248,8 +248,14 @@ export class QRGeneratorComponent {
     this.isUploadingLogo.set(true);
 
     try {
-      const logoUrl = await this.storageService.uploadLogo(file);
-      this.options.update(opts => ({ ...opts, logoUrl }));
+      // Read the image file locally and embed as data URL to avoid requiring upload endpoints
+      const dataUrl: string = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(new Error('Failed to read logo file'));
+        reader.readAsDataURL(file);
+      });
+      this.options.update(opts => ({ ...opts, logoUrl: dataUrl }));
     } catch (error) {
       console.error('Logo upload failed:', error);
       // Handle error - show toast/snackbar

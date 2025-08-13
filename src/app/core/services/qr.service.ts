@@ -62,8 +62,11 @@ export class QRService {
   ];
 
   private isTestUser(): boolean {
-    const token = this.authService.getToken();
-    return !!token && token.startsWith('test-jwt-token-');
+    // Test mode disabled: always use backend-generated QR instead of mock image
+    // If you want to re-enable mock mode, restore the token-based check below.
+    // const token = this.authService.getToken();
+    // return !!token && token.startsWith('test-jwt-token-');
+    return false;
   }
 
   private generateMockImage(options: QROptions): string {

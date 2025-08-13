@@ -6,7 +6,7 @@ dist/
 tmp/
 out-tsc/
 .angular/
-.angular/cache/
+.angular/cache
 
 ## Node and package manager logs
 logs
@@ -69,3 +69,4 @@ typings/
 ## Firebase
 .firebase/
 firebase-debug.log
+
