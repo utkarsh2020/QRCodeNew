@@ -56,6 +56,11 @@ export class StyleEditorComponent implements OnInit {
     this.valueChange.emit(this.value);
   }
 
+  updateNumber<K extends keyof QROptions>(key: K, event: any): void {
+    const val = typeof event === 'number' ? event : event.target?.value;
+    this.update(key, val as QROptions[K]);
+  }
+
   updateGradient<K extends keyof GradientOptions>(key: K, val: GradientOptions[K]): void {
     const gradient = { ...(this.value.gradient || {}), [key]: val };
     this.update('gradient', gradient);

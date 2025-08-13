@@ -103,10 +103,9 @@
               min="0" 
               max="64" 
               step="1" 
-              [value]="value.quietZone || 0"
-              (valueChange)="update('quietZone', $event)"
+              [ngModel]="value.quietZone || 0"
+              (ngModelChange)="update('quietZone', $event)"
               thumbLabel
-              [displayWith]="formatLabel"
             ></mat-slider>
           </div>
 
@@ -116,10 +115,9 @@
               min="0" 
               max="1" 
               step="0.1" 
-              [value]="value.roundedCorners || 0"
-              (valueChange)="update('roundedCorners', $event)"
+              [ngModel]="value.roundedCorners || 0"
+              (ngModelChange)="update('roundedCorners', $event)"
               thumbLabel
-              [displayWith]="formatLabel"
             ></mat-slider>
           </div>
         </div>
@@ -209,10 +207,9 @@
                   min="0" 
                   max="360" 
                   step="15" 
-                  [value]="value.gradient?.rotation || 0"
-                  (valueChange)="updateGradient('rotation', $event)"
+                  [ngModel]="value.gradient?.rotation || 0"
+                  (ngModelChange)="updateGradient('rotation', $event)"
                   thumbLabel
-                  [displayWith]="formatLabel"
                 ></mat-slider>
               </div>
 

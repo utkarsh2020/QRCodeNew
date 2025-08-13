@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 import { QRService } from '../../core/services/qr.service';
 import { StyleEditorComponent } from '../style-editor/style-editor.component';
@@ -26,7 +26,7 @@ import { QRItem, QROptions } from '../../core/models/qr';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    QRCodeModule,
+    QRCodeComponent,
     StyleEditorComponent
   ],
   templateUrl: './qr-detail.component.html',
@@ -109,7 +109,7 @@ export class QRDetailComponent implements OnInit {
   editForm = this.fb.group({
     title: [''],
     data: [''],
-    options: [{}]
+    options: this.fb.control<QROptions>({})
   });
 
   options = signal<QROptions>({});
@@ -164,7 +164,7 @@ export class QRDetailComponent implements OnInit {
       const payload = {
         title: this.editForm.value.title || undefined,
         data: parsedData,
-        options: this.options()
+        options: this.options() as any
       };
 
       const updated = await this.qrService.updateQR(qr.id, payload).toPromise();

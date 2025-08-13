@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 import { StorageService } from '../../core/services/storage.service';
 import { QRService } from '../../core/services/qr.service';
@@ -26,7 +26,7 @@ import { QROptions, FileRedirectData } from '../../core/models/qr';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    QRCodeModule
+    QRCodeComponent
   ],
   templateUrl: './file-redirect.component.html',
   styles: [`

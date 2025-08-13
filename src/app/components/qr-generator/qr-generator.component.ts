@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 import { QRService } from '../../core/services/qr.service';
 import { StorageService } from '../../core/services/storage.service';
@@ -45,7 +45,7 @@ import {
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    QRCodeModule,
+    QRCodeComponent,
     StyleEditorComponent,
     ErrorMessagesComponent
   ],
@@ -177,10 +177,10 @@ export class QRGeneratorComponent {
 
     switch (type) {
       case 'url':
-        return data.url || '';
+        return (data as any).url || '';
 
       case 'text':
-        return data.text || '';
+        return (data as any).text || '';
 
       case 'email':
         const emailData = data as EmailData;
