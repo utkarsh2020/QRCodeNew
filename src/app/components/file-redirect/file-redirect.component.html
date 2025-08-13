@@ -1,0 +1,179 @@
+<div class="file-redirect-container">
+  <div class="header-section">
+    <h1 class="text-3xl font-bold mb-2">File Redirect QR</h1>
+    <p class="text-gray-600 mb-6">
+      Upload a file and create a QR code that redirects to it
+    </p>
+  </div>
+
+  <!-- Upload Section -->
+  <mat-card class="upload-section">
+    <mat-card-header>
+      <mat-card-title>Upload File</mat-card-title>
+      <mat-card-subtitle>
+        Choose a file to upload and create a redirect QR code
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="!file(); else fileUploaded">
+        <input 
+          type="file" 
+          #fileInput 
+          (change)="onFileSelected($event)"
+          style="display: none;"
+        >
+
+        <div 
+          class="file-drop-zone"
+          (click)="fileInput.click()"
+          (drop)="onFileDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <mat-icon>cloud_upload</mat-icon>
+          <div class="upload-text">
+            <strong>Click to upload</strong> or drag and drop
+          </div>
+          <div class="upload-hint">
+            Any file type is supported (max 100MB)
+          </div>
+        </div>
+      </div>
+
+      <ng-template #fileUploaded>
+        <div class="file-info">
+          <div class="file-details">
+            <mat-icon>{{ getFileIcon(file()!) }}</mat-icon>
+            <div class="file-meta">
+              <div class="file-name">{{ file()!.name }}</div>
+              <div class="file-size">{{ formatFileSize(file()!.size) }}</div>
+            </div>
+            <button mat-icon-button (click)="clearFile()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <div *ngIf="isUploading()" class="upload-progress mt-3">
+            <mat-spinner diameter="30"></mat-spinner>
+            <span class="ml-2">Uploading...</span>
+          </div>
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- File Details Form -->
+  <mat-card *ngIf="fileUrl()">
+    <mat-card-header>
+      <mat-card-title>QR Code Details</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="fileForm">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>QR Code Title</mat-label>
+          <input matInput formControlName="title" placeholder="My Document">
+          <mat-icon matSuffix>title</mat-icon>
+          <mat-error *ngIf="fileForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Display Filename</mat-label>
+          <input matInput formControlName="filename" placeholder="document.pdf">
+          <mat-icon matSuffix>text_fields</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Description (optional)</mat-label>
+          <textarea 
+            matInput 
+            formControlName="description" 
+            rows="3"
+            placeholder="Brief description of the file"
+          ></textarea>
+        </mat-form-field>
+
+        <div class="file-url-display">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>File URL</mat-label>
+            <input matInput [value]="fileUrl()" readonly>
+            <mat-icon matSuffix>link</mat-icon>
+            <button 
+              matSuffix 
+              mat-icon-button 
+              (click)="copyToClipboard(fileUrl())"
+              [attr.title]="'Copy URL'"
+            >
+              <mat-icon>content_copy</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="generateQR()"
+        [disabled]="fileForm.invalid || isGenerating()"
+      >
+        <mat-spinner *ngIf="isGenerating()" diameter="20" class="mr-2"></mat-spinner>
+        <mat-icon *ngIf="!isGenerating()">qr_code</mat-icon>
+        {{ isGenerating() ? 'Generating...' : 'Generate QR Code' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- QR Code Preview -->
+  <mat-card *ngIf="generatedQR()" class="qr-section">
+    <mat-card-header>
+      <mat-card-title>Generated QR Code</mat-card-title>
+      <mat-card-subtitle>
+        Scan to access: {{ fileForm.value.filename || file()?.name }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="qr-preview">
+        <img 
+          [src]="generatedQR()" 
+          [alt]="'QR Code for ' + (file()?.name || 'file')"
+          class="max-w-xs"
+        >
+
+        <div class="qr-info mt-4">
+          <p class="font-medium">{{ fileForm.value.title }}</p>
+          <p class="text-sm">File: {{ fileForm.value.filename || file()?.name }}</p>
+          <p class="text-sm">Size: {{ file() ? formatFileSize(file()!.size) : '' }}</p>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <a mat-button routerLink="/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        View in Dashboard
+      </a>
+
+      <button mat-button (click)="clearFile()">
+        <mat-icon>refresh</mat-icon>
+        Upload Another File
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Success Message -->
+  <div *ngIf="generatedQR()" class="success-message mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+    <div class="flex items-center text-green-800">
+      <mat-icon class="mr-2">check_circle</mat-icon>
+      <strong>Success!</strong>
+    </div>
+    <p class="mt-2 text-green-700">
+      Your file redirect QR code has been created. You'll be redirected to the dashboard shortly.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,215 @@
+.generator-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.generator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.forms-panel,
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-section {
+  margin: 1rem 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.general-settings {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.logo-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+
+  h4 {
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 500;
+  }
+
+  .logo-preview {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 4px;
+      background: white;
+      padding: 4px;
+      border: 1px solid #ddd;
+    }
+  }
+}
+
+.file-upload-section {
+  margin-bottom: 1rem;
+}
+
+.preview-card,
+.result-card {
+  .qr-preview,
+  .generated-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 2px dashed #e0e0e0;
+
+    qrcode,
+    img {
+      margin-bottom: 1rem;
+    }
+
+    .frame-text {
+      font-weight: 500;
+      color: #333;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .generated-qr {
+    background: white;
+    border-style: solid;
+    border-color: #4caf50;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .short-url {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  }
+}
+
+// Material form field customizations
+mat-form-field {
+  margin-bottom: 1rem;
+
+  .mat-form-field-suffix mat-icon {
+    color: #666;
+  }
+}
+
+mat-checkbox {
+  margin: 1rem 0;
+}
+
+mat-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  button {
+    flex: 1;
+    min-width: 120px;
+
+    @media (max-width: 768px) {
+      min-width: auto;
+      flex: none;
+    }
+  }
+}
+
+// Spinner positioning
+.mr-2 {
+  margin-right: 8px !important;
+}
+
+// Loading states
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .generator-container {
+    padding: 1rem;
+  }
+
+  .generator-grid {
+    gap: 1rem;
+  }
+
+  .forms-panel,
+  .preview-panel {
+    gap: 1rem;
+  }
+
+  .form-row {
+    gap: 0.5rem;
+  }
+
+  .preview-card .qr-preview,
+  .result-card .generated-qr {
+    padding: 1rem;
+  }
+}
+
+// Custom scrollbar for long forms
+.forms-panel {
+  max-height: 100vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+
+    &:hover {
+      background: #a1a1a1;
+    }
+  }
+}

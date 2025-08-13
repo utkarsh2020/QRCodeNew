@@ -1,0 +1,70 @@
+<mat-toolbar color="primary">
+  <a 
+    routerLink="/" 
+    class="font-semibold text-white no-underline hover:text-gray-200 transition-colors"
+  >
+    🎯 QR Manager
+  </a>
+
+  <div class="toolbar-spacer"></div>
+
+  <div class="nav-links" *ngIf="authService.user()">
+    <a 
+      mat-button 
+      routerLink="/generate" 
+      routerLinkActive="mat-accent"
+      class="nav-link"
+    >
+      <mat-icon>qr_code</mat-icon>
+      Generate
+    </a>
+
+    <a 
+      mat-button 
+      routerLink="/dashboard" 
+      routerLinkActive="mat-accent"
+      class="nav-link"
+    >
+      <mat-icon>dashboard</mat-icon>
+      Dashboard
+    </a>
+
+    <a 
+      mat-button 
+      routerLink="/batch" 
+      routerLinkActive="mat-accent"
+      class="nav-link"
+    >
+      <mat-icon>upload_file</mat-icon>
+      Batch
+    </a>
+  </div>
+
+  <!-- Guest navigation -->
+  <div *ngIf="!authService.user()">
+    <a mat-button routerLink="/auth">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
+  </div>
+
+  <!-- User menu -->
+  <div *ngIf="authService.user()" class="user-menu">
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      {{ authService.user()?.email }}
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="navigateToProfile()">
+        <mat-icon>person</mat-icon>
+        Profile
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

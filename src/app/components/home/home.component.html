@@ -1,0 +1,101 @@
+<div class="min-h-screen">
+  <!-- Hero Section -->
+  <section class="hero-section py-20">
+    <div class="container mx-auto px-6">
+      <div class="hero-content max-w-4xl mx-auto">
+        <h1 class="text-5xl font-bold mb-6">
+          QR Code Generator & Manager
+        </h1>
+        <p class="text-xl mb-8 text-gray-200">
+          Create, customize, and manage QR codes with advanced features including 
+          analytics, batch processing, and cloud integration.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            routerLink="/generate" 
+            mat-raised-button 
+            color="accent" 
+            class="text-lg px-8 py-3"
+          >
+            <mat-icon>add</mat-icon>
+            Generate QR Code
+          </a>
+          <a 
+            routerLink="/dashboard" 
+            mat-stroked-button 
+            class="text-lg px-8 py-3 text-white border-white"
+          >
+            <mat-icon>dashboard</mat-icon>
+            View Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="stats-grid text-center">
+        <div *ngFor="let stat of stats" class="stat-item">
+          <div class="text-3xl font-bold text-blue-600 mb-2">{{ stat.value }}</div>
+          <div class="text-gray-600">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Powerful Features</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Everything you need to create professional QR codes with advanced 
+          customization and management capabilities.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <mat-card 
+          *ngFor="let feature of features" 
+          class="feature-card p-6 text-center cursor-pointer"
+        >
+          <mat-icon class="feature-icon text-blue-600">{{ feature.icon }}</mat-icon>
+          <h3 class="text-xl font-semibold mb-3">{{ feature.title }}</h3>
+          <p class="text-gray-600">{{ feature.description }}</p>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-blue-600 text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold mb-6">Ready to Get Started?</h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">
+        Join thousands of users who trust our platform for their QR code needs.
+        Create your first QR code in minutes.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          routerLink="/auth" 
+          mat-raised-button 
+          color="accent" 
+          class="text-lg px-8 py-3"
+        >
+          <mat-icon>person_add</mat-icon>
+          Sign Up Free
+        </a>
+        <a 
+          routerLink="/generate" 
+          mat-stroked-button 
+          class="text-lg px-8 py-3 text-white border-white"
+        >
+          <mat-icon>play_arrow</mat-icon>
+          Try Demo
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

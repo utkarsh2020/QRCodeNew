@@ -1,0 +1,236 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Style Customization</mat-card-title>
+    <mat-card-subtitle>Customize your QR code appearance</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-tab-group>
+      <!-- Basic Colors Tab -->
+      <mat-tab label="Colors">
+        <div class="tab-content">
+          <div class="color-section">
+            <h4>Foreground Color</h4>
+            <div class="color-controls">
+              <input 
+                type="color" 
+                [ngModel]="value.color" 
+                (ngModelChange)="update('color', $event)"
+                class="color-input"
+              />
+              <mat-form-field appearance="outline" class="color-text">
+                <mat-label>Hex Color</mat-label>
+                <input 
+                  matInput 
+                  [ngModel]="value.color" 
+                  (ngModelChange)="update('color', $event)"
+                  placeholder="#000000"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="preset-colors">
+              <button 
+                *ngFor="let color of getPresetColors()"
+                class="preset-color"
+                [style.background-color]="color"
+                (click)="applyPresetColor(color, 'color')"
+                [attr.title]="color"
+              ></button>
+            </div>
+          </div>
+
+          <div class="color-section">
+            <h4>Background Color</h4>
+            <div class="color-controls">
+              <input 
+                type="color" 
+                [ngModel]="value.bgColor" 
+                (ngModelChange)="update('bgColor', $event)"
+                class="color-input"
+              />
+              <mat-form-field appearance="outline" class="color-text">
+                <mat-label>Hex Color</mat-label>
+                <input 
+                  matInput 
+                  [ngModel]="value.bgColor" 
+                  (ngModelChange)="update('bgColor', $event)"
+                  placeholder="#ffffff"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="preset-colors">
+              <button 
+                *ngFor="let color of getPresetColors()"
+                class="preset-color"
+                [style.background-color]="color"
+                (click)="applyPresetColor(color, 'bgColor')"
+                [attr.title]="color"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Shape & Style Tab -->
+      <mat-tab label="Shape & Style">
+        <div class="tab-content">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Dot Style</mat-label>
+              <mat-select [ngModel]="value.dotStyle" (ngModelChange)="update('dotStyle', $event)">
+                <mat-option value="square">Square</mat-option>
+                <mat-option value="rounded">Rounded</mat-option>
+                <mat-option value="dots">Dots</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Eye Shape</mat-label>
+              <mat-select [ngModel]="value.eyeShape" (ngModelChange)="update('eyeShape', $event)">
+                <mat-option value="square">Square</mat-option>
+                <mat-option value="circle">Circle</mat-option>
+                <mat-option value="leaf">Leaf</mat-option>
+                <mat-option value="diamond">Diamond</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="slider-section">
+            <label>Quiet Zone: {{ value.quietZone }}px</label>
+            <mat-slider 
+              min="0" 
+              max="64" 
+              step="1" 
+              [value]="value.quietZone || 0"
+              (valueChange)="update('quietZone', $event)"
+              thumbLabel
+              [displayWith]="formatLabel"
+            ></mat-slider>
+          </div>
+
+          <div class="slider-section">
+            <label>Rounded Corners: {{ ((value.roundedCorners || 0) * 100).toFixed(0) }}%</label>
+            <mat-slider 
+              min="0" 
+              max="1" 
+              step="0.1" 
+              [value]="value.roundedCorners || 0"
+              (valueChange)="update('roundedCorners', $event)"
+              thumbLabel
+              [displayWith]="formatLabel"
+            ></mat-slider>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Size & Quality Tab -->
+      <mat-tab label="Size & Quality">
+        <div class="tab-content">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Size (pixels)</mat-label>
+              <input 
+                matInput 
+                type="number" 
+                min="128" 
+                max="1024" 
+                [ngModel]="value.width" 
+                (ngModelChange)="update('width', $event)"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Error Correction</mat-label>
+              <mat-select [ngModel]="value.errorCorrection" (ngModelChange)="update('errorCorrection', $event)">
+                <mat-option value="L">Low (7%)</mat-option>
+                <mat-option value="M">Medium (15%)</mat-option>
+                <mat-option value="Q">Quartile (25%)</mat-option>
+                <mat-option value="H">High (30%)</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Frame Text (optional)</mat-label>
+            <input 
+              matInput 
+              [ngModel]="value.frameText" 
+              (ngModelChange)="update('frameText', $event)"
+              placeholder="Scan Me"
+            />
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+      <!-- Gradient Tab -->
+      <mat-tab label="Gradient">
+        <div class="tab-content">
+          <div class="gradient-controls">
+            <mat-form-field appearance="outline">
+              <mat-label>Gradient Type</mat-label>
+              <mat-select 
+                [ngModel]="value.gradient?.type" 
+                (ngModelChange)="updateGradient('type', $event)"
+              >
+                <mat-option [value]="undefined">None</mat-option>
+                <mat-option value="linear">Linear</mat-option>
+                <mat-option value="radial">Radial</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div *ngIf="value.gradient?.type" class="gradient-settings">
+              <div class="form-row">
+                <div class="color-section">
+                  <label>From Color</label>
+                  <input 
+                    type="color" 
+                    [ngModel]="value.gradient?.from" 
+                    (ngModelChange)="updateGradient('from', $event)"
+                    class="color-input"
+                  />
+                </div>
+
+                <div class="color-section">
+                  <label>To Color</label>
+                  <input 
+                    type="color" 
+                    [ngModel]="value.gradient?.to" 
+                    (ngModelChange)="updateGradient('to', $event)"
+                    class="color-input"
+                  />
+                </div>
+              </div>
+
+              <div *ngIf="value.gradient?.type === 'linear'" class="slider-section">
+                <label>Rotation: {{ value.gradient?.rotation || 0 }}°</label>
+                <mat-slider 
+                  min="0" 
+                  max="360" 
+                  step="15" 
+                  [value]="value.gradient?.rotation || 0"
+                  (valueChange)="updateGradient('rotation', $event)"
+                  thumbLabel
+                  [displayWith]="formatLabel"
+                ></mat-slider>
+              </div>
+
+              <button mat-stroked-button (click)="clearGradient()">
+                <mat-icon>clear</mat-icon>
+                Clear Gradient
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button (click)="resetToDefaults()">
+      <mat-icon>refresh</mat-icon>
+      Reset to Defaults
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,182 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value">{{ getStatistics().total }}</div>
+          <div class="stat-label">Total QR Codes</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value">{{ getStatistics().dynamic }}</div>
+          <div class="stat-label">Dynamic QR Codes</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value">{{ getStatistics().static }}</div>
+          <div class="stat-label">Static QR Codes</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-value">{{ getStatistics().scans }}</div>
+          <div class="stat-label">Total Scans</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading()" class="text-center py-8">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="mt-4 text-gray-600">Loading your QR codes...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading() && qrCodes().length === 0" class="empty-state">
+    <mat-icon>qr_code</mat-icon>
+    <h3 class="text-xl font-semibold mb-2">No QR Codes Yet</h3>
+    <p class="mb-4">Create your first QR code to get started!</p>
+    <a mat-raised-button color="primary" routerLink="/generate">
+      <mat-icon>add</mat-icon>
+      Generate QR Code
+    </a>
+  </div>
+
+  <!-- QR Codes Grid -->
+  <div *ngIf="!isLoading() && qrCodes().length > 0">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold">My QR Codes</h2>
+      <a mat-raised-button color="primary" routerLink="/generate">
+        <mat-icon>add</mat-icon>
+        New QR Code
+      </a>
+    </div>
+
+    <div class="qr-grid">
+      <mat-card *ngFor="let qr of qrCodes()" class="qr-card">
+        <mat-card-content>
+          <img 
+            *ngIf="qr.imageUrl" 
+            [src]="qr.imageUrl" 
+            [alt]="qr.title || qr.type"
+            class="qr-image"
+          >
+
+          <div class="qr-info">
+            <div class="qr-title">{{ qr.title || qr.type.toUpperCase() }}</div>
+
+            <div class="qr-meta">
+              <span>
+                <mat-icon [inline]="true">{{ getQRTypeIcon(qr.type) }}</mat-icon>
+                {{ qr.type.toUpperCase() }}
+              </span>
+              <span *ngIf="qr.isDynamic" class="text-green-600">
+                <mat-icon [inline]="true">sync</mat-icon>
+                Dynamic
+              </span>
+            </div>
+
+            <div class="text-sm text-gray-500 mb-3">
+              Created: {{ qr.createdAt | date:'short' }}
+              <span *ngIf="qr.scanCount"> • {{ qr.scanCount }} scans</span>
+            </div>
+
+            <mat-chip-set *ngIf="qr.shortUrl">
+              <mat-chip>{{ qr.shortUrl }}</mat-chip>
+            </mat-chip-set>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button [routerLink]="['/qr', qr.id]">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>
+
+          <button mat-button (click)="viewAnalytics(qr)">
+            <mat-icon>analytics</mat-icon>
+            Analytics
+          </button>
+
+          <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <mat-menu #actionMenu="matMenu">
+            <button mat-menu-item (click)="duplicateQR(qr)">
+              <mat-icon>content_copy</mat-icon>
+              Duplicate
+            </button>
+            <button mat-menu-item (click)="deleteQR(qr)" class="text-red-600">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+          </mat-menu>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Analytics Chart -->
+  <div *ngIf="selectedQR() && analytics()" class="chart-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          Analytics: {{ selectedQR()?.title || selectedQR()?.type.toUpperCase() }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          Total Scans: {{ analytics()?.totalScans }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div style="height: 300px;">
+          <canvas 
+            baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            [type]="chartType"
+          ></canvas>
+        </div>
+
+        <!-- Device breakdown -->
+        <div *ngIf="analytics()?.byDevice" class="mt-6">
+          <h4 class="text-lg font-semibold mb-3">Scans by Device</h4>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div *ngFor="let device of analytics()!.byDevice | keyvalue" class="text-center">
+              <div class="text-2xl font-bold text-blue-600">{{ device.value }}</div>
+              <div class="text-sm text-gray-600">{{ device.key }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Geographic breakdown -->
+        <div *ngIf="analytics()?.byGeo" class="mt-6">
+          <h4 class="text-lg font-semibold mb-3">Scans by Location</h4>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div *ngFor="let geo of analytics()!.byGeo | keyvalue" class="text-center">
+              <div class="text-2xl font-bold text-green-600">{{ geo.value }}</div>
+              <div class="text-sm text-gray-600">{{ geo.key }}</div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button (click)="selectedQR.set(null); analytics.set(null)">
+          <mat-icon>close</mat-icon>
+          Close
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

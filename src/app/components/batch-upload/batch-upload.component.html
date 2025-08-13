@@ -1,0 +1,223 @@
+<div class="batch-container">
+  <div class="batch-header">
+    <h1 class="text-3xl font-bold mb-2">Batch Upload</h1>
+    <p class="text-gray-600 mb-6">
+      Upload CSV data to generate multiple QR codes at once
+    </p>
+  </div>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>CSV Upload</mat-card-title>
+      <mat-card-subtitle>
+        Prepare your data in CSV format with the required columns
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Instructions -->
+      <div class="example-section">
+        <h4>Required CSV Format:</h4>
+        <p class="text-sm text-gray-600 mb-2">
+          Your CSV must include <strong>type</strong> and <strong>data</strong> columns. 
+          The <strong>options</strong> and <strong>title</strong> columns are optional.
+        </p>
+
+        <div class="mb-2">
+          <button mat-button (click)="loadExample()">
+            <mat-icon>file_copy</mat-icon>
+            Load Example
+          </button>
+        </div>
+
+        <details>
+          <summary class="cursor-pointer font-medium mb-2">View Example CSV</summary>
+          <pre>{{ exampleCsv }}</pre>
+        </details>
+      </div>
+
+      <!-- CSV Input -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>CSV Data</mat-label>
+        <textarea 
+          matInput 
+          [(ngModel)]="csvText"
+          rows="12"
+          class="csv-textarea"
+          placeholder="Paste your CSV data here..."
+        ></textarea>
+        <mat-hint>
+          Format: type,data,options,title (data and options should be JSON-encoded)
+        </mat-hint>
+      </mat-form-field>
+
+      <!-- Options -->
+      <div class="options-section">
+        <mat-checkbox [(ngModel)]="isDynamic">
+          Create as Dynamic QR Codes (editable content)
+        </mat-checkbox>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button 
+        mat-raised-button 
+        color="primary"
+        (click)="processBatch()"
+        [disabled]="!csvText().trim() || isProcessing()"
+      >
+        <mat-spinner *ngIf="isProcessing()" diameter="20" class="mr-2"></mat-spinner>
+        <mat-icon *ngIf="!isProcessing()">upload</mat-icon>
+        {{ isProcessing() ? 'Processing...' : 'Process Batch' }}
+      </button>
+
+      <button 
+        mat-button 
+        (click)="clearResults()"
+        [disabled]="!results() && !error()"
+      >
+        <mat-icon>clear</mat-icon>
+        Clear Results
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Error Display -->
+  <mat-card *ngIf="error()" class="mt-4">
+    <mat-card-content>
+      <div class="flex items-center text-red-600">
+        <mat-icon class="mr-2">error</mat-icon>
+        <strong>Error:</strong>
+      </div>
+      <p class="mt-2">{{ error() }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Results Section -->
+  <div *ngIf="results()" class="results-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Batch Results</mat-card-title>
+        <mat-card-subtitle>
+          Processing completed
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Results Summary -->
+        <div class="result-summary">
+          <div class="summary-card">
+            <div class="value">{{ getResultsSummary()?.total }}</div>
+            <div class="label">Total</div>
+          </div>
+          <div class="summary-card">
+            <div class="value text-green-600">{{ getResultsSummary()?.successful }}</div>
+            <div class="label">Successful</div>
+          </div>
+          <div class="summary-card">
+            <div class="value text-red-600">{{ getResultsSummary()?.failed }}</div>
+            <div class="label">Failed</div>
+          </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="results-table">
+          <table mat-table [dataSource]="results()!" class="w-full">
+            <!-- Index Column -->
+            <ng-container matColumnDef="index">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="flex items-center">
+                  <mat-icon 
+                    [class]="element.success ? 'status-success' : 'status-error'"
+                    class="mr-1"
+                  >
+                    {{ element.success ? 'check_circle' : 'error' }}
+                  </mat-icon>
+                  <span [class]="element.success ? 'status-success' : 'status-error'">
+                    {{ element.success ? 'Success' : 'Failed' }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let element; let i = index">
+                <!-- We don't have type in response, show from index -->
+                <span class="text-sm text-gray-600">Item {{ i + 1 }}</span>
+              </td>
+            </ng-container>
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID / URL</th>
+              <td mat-cell *matCellDef="let element">
+                <div *ngIf="element.success">
+                  <div *ngIf="element.id" class="text-xs text-gray-600 mb-1">
+                    ID: {{ element.id }}
+                  </div>
+                  <div *ngIf="element.shortUrl">
+                    <a 
+                      [href]="element.shortUrl" 
+                      target="_blank"
+                      class="text-blue-600 hover:underline text-sm"
+                    >
+                      {{ element.shortUrl }}
+                    </a>
+                  </div>
+                  <div *ngIf="element.imageUrl && !element.shortUrl">
+                    <a 
+                      [href]="element.imageUrl" 
+                      target="_blank"
+                      class="text-blue-600 hover:underline text-sm"
+                    >
+                      View Image
+                    </a>
+                  </div>
+                </div>
+                <span *ngIf="!element.success" class="text-gray-400">-</span>
+              </td>
+            </ng-container>
+
+            <!-- Errors Column -->
+            <ng-container matColumnDef="errors">
+              <th mat-header-cell *matHeaderCellDef>Errors</th>
+              <td mat-cell *matCellDef="let element">
+                <span 
+                  *ngIf="element.errors" 
+                  class="text-red-600 text-sm"
+                >
+                  {{ element.errors }}
+                </span>
+                <span *ngIf="!element.errors" class="text-gray-400">-</span>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-button (click)="downloadResults()">
+          <mat-icon>download</mat-icon>
+          Download Results CSV
+        </button>
+
+        <a mat-button routerLink="/dashboard">
+          <mat-icon>dashboard</mat-icon>
+          View Dashboard
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

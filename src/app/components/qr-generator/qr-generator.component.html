@@ -1,0 +1,451 @@
+<div class="generator-container">
+  <div class="generator-grid">
+    <!-- Left Panel - Forms -->
+    <div class="forms-panel">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Generate QR Code</mat-card-title>
+          <mat-card-subtitle>Choose type and configure your QR code</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- QR Type Selection -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>QR Code Type</mat-label>
+            <mat-select [value]="selectedType()" (selectionChange)="onTypeChange($event.value)">
+              <mat-option value="url">
+                <mat-icon>link</mat-icon>
+                Website URL
+              </mat-option>
+              <mat-option value="text">
+                <mat-icon>text_fields</mat-icon>
+                Plain Text
+              </mat-option>
+              <mat-option value="email">
+                <mat-icon>email</mat-icon>
+                Email
+              </mat-option>
+              <mat-option value="sms">
+                <mat-icon>sms</mat-icon>
+                SMS
+              </mat-option>
+              <mat-option value="wifi">
+                <mat-icon>wifi</mat-icon>
+                Wi-Fi Network
+              </mat-option>
+              <mat-option value="vcard">
+                <mat-icon>contact_page</mat-icon>
+                Contact Card
+              </mat-option>
+              <mat-option value="social">
+                <mat-icon>share</mat-icon>
+                Social Media
+              </mat-option>
+              <mat-option value="payment">
+                <mat-icon>payment</mat-icon>
+                Payment (UPI/PayPal)
+              </mat-option>
+              <mat-option value="file">
+                <mat-icon>attach_file</mat-icon>
+                File Redirect
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Dynamic Forms for Each Type -->
+          <div class="form-section">
+            <!-- URL Form -->
+            <form *ngIf="selectedType() === 'url'" [formGroup]="urlForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Website URL</mat-label>
+                <input matInput formControlName="url" placeholder="https://example.com">
+                <mat-icon matSuffix>link</mat-icon>
+              </mat-form-field>
+              <app-error-messages [control]="urlForm.get('url')" fieldName="URL"></app-error-messages>
+            </form>
+
+            <!-- Text Form -->
+            <form *ngIf="selectedType() === 'text'" [formGroup]="textForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Text Content</mat-label>
+                <textarea matInput formControlName="text" rows="4" placeholder="Enter your text here"></textarea>
+                <mat-icon matSuffix>text_fields</mat-icon>
+              </mat-form-field>
+              <app-error-messages [control]="textForm.get('text')" fieldName="Text"></app-error-messages>
+            </form>
+
+            <!-- Email Form -->
+            <form *ngIf="selectedType() === 'email'" [formGroup]="emailForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Recipient Email</mat-label>
+                <input matInput type="email" formControlName="to" placeholder="recipient@example.com">
+                <mat-icon matSuffix>email</mat-icon>
+              </mat-form-field>
+              <app-error-messages [control]="emailForm.get('to')" fieldName="Email"></app-error-messages>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Subject (optional)</mat-label>
+                <input matInput formControlName="subject" placeholder="Email subject">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Message (optional)</mat-label>
+                <textarea matInput formControlName="body" rows="3" placeholder="Email message"></textarea>
+              </mat-form-field>
+            </form>
+
+            <!-- SMS Form -->
+            <form *ngIf="selectedType() === 'sms'" [formGroup]="smsForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phone" placeholder="+1234567890">
+                <mat-icon matSuffix>phone</mat-icon>
+              </mat-form-field>
+              <app-error-messages [control]="smsForm.get('phone')" fieldName="Phone"></app-error-messages>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Message (optional)</mat-label>
+                <textarea matInput formControlName="message" rows="3" placeholder="SMS message"></textarea>
+              </mat-form-field>
+            </form>
+
+            <!-- WiFi Form -->
+            <form *ngIf="selectedType() === 'wifi'" [formGroup]="wifiForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Network Name (SSID)</mat-label>
+                <input matInput formControlName="ssid" placeholder="MyWiFi">
+                <mat-icon matSuffix>wifi</mat-icon>
+              </mat-form-field>
+              <app-error-messages [control]="wifiForm.get('ssid')" fieldName="SSID"></app-error-messages>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" formControlName="password" placeholder="WiFi password">
+                <mat-icon matSuffix>lock</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Security Type</mat-label>
+                <mat-select formControlName="encryption">
+                  <mat-option value="WPA">WPA/WPA2</mat-option>
+                  <mat-option value="WEP">WEP</mat-option>
+                  <mat-option value="nopass">No Password</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-checkbox formControlName="hidden">Hidden Network</mat-checkbox>
+            </form>
+
+            <!-- vCard Form -->
+            <form *ngIf="selectedType() === 'vcard'" [formGroup]="vcardForm">
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input matInput formControlName="firstName" placeholder="John">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput formControlName="lastName" placeholder="Doe">
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Organization</mat-label>
+                  <input matInput formControlName="org" placeholder="Company Inc.">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Job Title</mat-label>
+                  <input matInput formControlName="title" placeholder="Manager">
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="phone" placeholder="+1234567890">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" formControlName="email" placeholder="john@example.com">
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Website</mat-label>
+                <input matInput formControlName="url" placeholder="https://example.com">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Address</mat-label>
+                <textarea matInput formControlName="address" rows="2" placeholder="123 Main St, City, Country"></textarea>
+              </mat-form-field>
+            </form>
+
+            <!-- Social Form -->
+            <form *ngIf="selectedType() === 'social'" [formGroup]="socialForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Facebook</mat-label>
+                <input matInput formControlName="facebook" placeholder="https://facebook.com/username">
+                <mat-icon matSuffix>facebook</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Instagram</mat-label>
+                <input matInput formControlName="instagram" placeholder="https://instagram.com/username">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Twitter/X</mat-label>
+                <input matInput formControlName="twitter" placeholder="https://x.com/username">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>LinkedIn</mat-label>
+                <input matInput formControlName="linkedin" placeholder="https://linkedin.com/in/username">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Website</mat-label>
+                <input matInput formControlName="website" placeholder="https://yourwebsite.com">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>WhatsApp</mat-label>
+                <input matInput formControlName="whatsapp" placeholder="+1234567890">
+              </mat-form-field>
+            </form>
+
+            <!-- Payment Form -->
+            <form *ngIf="selectedType() === 'payment'" [formGroup]="paymentForm">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Payment Method</mat-label>
+                <mat-select formControlName="method">
+                  <mat-option value="upi">UPI (India)</mat-option>
+                  <mat-option value="paypal">PayPal</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <!-- UPI Fields -->
+              <div *ngIf="paymentForm.get('method')?.value === 'upi'">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>UPI ID</mat-label>
+                  <input matInput formControlName="upiId" placeholder="user@bank">
+                  <mat-icon matSuffix>account_balance</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <!-- PayPal Fields -->
+              <div *ngIf="paymentForm.get('method')?.value === 'paypal'">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>PayPal.me Link</mat-label>
+                  <input matInput formControlName="paypalMe" placeholder="paypal.me/username">
+                  <mat-icon matSuffix>paypal</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Currency</mat-label>
+                  <mat-select formControlName="currency">
+                    <mat-option value="USD">USD</mat-option>
+                    <mat-option value="EUR">EUR</mat-option>
+                    <mat-option value="GBP">GBP</mat-option>
+                    <mat-option value="INR">INR</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Amount</mat-label>
+                  <input matInput type="number" min="0" step="0.01" formControlName="amount" placeholder="0.00">
+                  <mat-icon matSuffix>attach_money</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Note</mat-label>
+                  <input matInput formControlName="note" placeholder="Payment for...">
+                </mat-form-field>
+              </div>
+            </form>
+
+            <!-- File Form -->
+            <form *ngIf="selectedType() === 'file'" [formGroup]="fileForm">
+              <div class="file-upload-section">
+                <input 
+                  type="file" 
+                  #fileInput 
+                  (change)="onFileUpload($event)"
+                  style="display: none;"
+                >
+                <button 
+                  type="button" 
+                  mat-stroked-button 
+                  (click)="fileInput.click()"
+                  [disabled]="isUploadingLogo()"
+                >
+                  <mat-spinner *ngIf="isUploadingLogo()" diameter="20" class="mr-2"></mat-spinner>
+                  <mat-icon *ngIf="!isUploadingLogo()">cloud_upload</mat-icon>
+                  {{ isUploadingLogo() ? 'Uploading...' : 'Upload File' }}
+                </button>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>File URL</mat-label>
+                <input matInput formControlName="fileUrl" readonly>
+                <mat-icon matSuffix>link</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Display Name (optional)</mat-label>
+                <input matInput formControlName="filename" placeholder="My Document.pdf">
+              </mat-form-field>
+            </form>
+          </div>
+
+          <!-- General Settings -->
+          <form [formGroup]="generalForm" class="general-settings">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title (optional)</mat-label>
+              <input matInput formControlName="title" placeholder="My QR Code">
+              <mat-icon matSuffix>title</mat-icon>
+            </mat-form-field>
+
+            <mat-checkbox 
+              [checked]="isDynamic()" 
+              (change)="isDynamic.set($event.checked)"
+            >
+              Dynamic QR Code (editable content)
+            </mat-checkbox>
+          </form>
+
+          <!-- Logo Upload -->
+          <div class="logo-section">
+            <h4>Logo (optional)</h4>
+            <input 
+              type="file" 
+              #logoInput 
+              (change)="onLogoSelected($event)"
+              accept="image/*"
+              style="display: none;"
+            >
+            <button 
+              type="button" 
+              mat-stroked-button 
+              (click)="logoInput.click()"
+              [disabled]="isUploadingLogo()"
+            >
+              <mat-spinner *ngIf="isUploadingLogo()" diameter="20" class="mr-2"></mat-spinner>
+              <mat-icon *ngIf="!isUploadingLogo()">image</mat-icon>
+              {{ isUploadingLogo() ? 'Uploading...' : 'Upload Logo' }}
+            </button>
+
+            <div *ngIf="options().logoUrl" class="logo-preview">
+              <img [src]="options().logoUrl" alt="Logo preview">
+              <button 
+                mat-icon-button 
+                color="warn" 
+                (click)="options.update(opts => ({ ...opts, logoUrl: undefined }))"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button 
+            mat-raised-button 
+            color="primary"
+            (click)="generate()"
+            [disabled]="!currentForm().valid || isGenerating()"
+          >
+            <mat-spinner *ngIf="isGenerating()" diameter="20" class="mr-2"></mat-spinner>
+            <mat-icon *ngIf="!isGenerating()">qr_code</mat-icon>
+            {{ isGenerating() ? 'Generating...' : 'Generate QR Code' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Style Editor -->
+      <app-style-editor 
+        [value]="options()" 
+        (valueChange)="options.set($event)"
+      ></app-style-editor>
+    </div>
+
+    <!-- Right Panel - Preview and Results -->
+    <div class="preview-panel">
+      <!-- Live Preview -->
+      <mat-card class="preview-card">
+        <mat-card-header>
+          <mat-card-title>Live Preview</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="qr-preview">
+            <qrcode
+              [qrdata]="previewData()"
+              [width]="options().width || 256"
+              [colorDark]="options().color || '#000000'"
+              [colorLight]="options().bgColor || '#ffffff'"
+              [errorCorrectionLevel]="options().errorCorrection || 'M'"
+              [margin]="options().quietZone || 0"
+            ></qrcode>
+
+            <div *ngIf="options().frameText" class="frame-text">
+              {{ options().frameText }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Generated Result -->
+      <mat-card *ngIf="generatedImageDataUrl()" class="result-card">
+        <mat-card-header>
+          <mat-card-title>Generated QR Code</mat-card-title>
+          <mat-card-subtitle>
+            {{ isDynamic() ? 'Dynamic QR Code' : 'Static QR Code' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="generated-qr">
+            <img 
+              [src]="generatedImageDataUrl()" 
+              [alt]="'Generated QR Code'"
+              [style.width.px]="Math.min(options().width || 256, 300)"
+            >
+
+            <div *ngIf="generatedShortUrl()" class="short-url">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Short URL</mat-label>
+                <input matInput [value]="generatedShortUrl()" readonly>
+                <button 
+                  matSuffix 
+                  mat-icon-button 
+                  (click)="copyToClipboard(generatedShortUrl()!)"
+                >
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button (click)="download('png')">
+            <mat-icon>download</mat-icon>
+            PNG
+          </button>
+          <button mat-button (click)="download('svg')">
+            <mat-icon>download</mat-icon>
+            SVG
+          </button>
+          <button mat-button (click)="download('pdf')">
+            <mat-icon>download</mat-icon>
+            PDF
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
