@@ -130,7 +130,7 @@ def _paste_logo_center(
     ratio: float = 0.22,
     rounded: bool = True,
     bg_rgb: tuple[int, int, int] = (255, 255, 255),
-    pad_alpha: int = 230,
+    pad_alpha: int = 255,
 ) -> Image.Image:
     """Paste the logo at the center of qr_img.
     ratio is the logo width / qr width.
@@ -141,19 +141,55 @@ def _paste_logo_center(
     target_w = int(qr_w * max(0.05, min(0.35, ratio)))
     aspect = logo_img.width / max(1, logo_img.height)
     target_h = int(target_w / aspect)
-    logo_resized = logo_img.resize((target_w, target_h), Image.LANCZOS)
+    
+    # Resize with high quality resampling
+    logo_resized = logo_img.resize((target_w, target_h), Image.Resampling.LANCZOS)
+    
+    # Ensure logo has alpha channel for transparency
+    if logo_resized.mode != 'RGBA':
+        logo_resized = logo_resized.convert('RGBA')
 
-    # Optional rounded mask
+    # Create rounded mask for better integration
     if rounded:
         mask = Image.new('L', (target_w, target_h), 0)
         draw = ImageDraw.Draw(mask)
-        radius = min(target_w, target_h) // 6
+        radius = min(target_w, target_h) // 8  # Smaller radius for better look
         draw.rounded_rectangle([0, 0, target_w, target_h], radius=radius, fill=255)
-        logo_resized.putalpha(mask)
+        
+        # Apply mask to existing alpha channel
+        alpha = logo_resized.split()[-1]  # Get existing alpha
+        # Combine existing alpha with rounded mask
+        combined_alpha = Image.new('L', (target_w, target_h), 0)
+        for x in range(target_w):
+            for y in range(target_h):
+                mask_val = mask.getpixel((x, y))
+                alpha_val = alpha.getpixel((x, y))
+                # Use minimum of mask and existing alpha
+                combined_alpha.putpixel((x, y), min(mask_val, alpha_val))
+        
+        logo_resized.putalpha(combined_alpha)
 
-    # Background pad that matches the QR background color
-    pad = max(4, target_w // 12)
-    bg = Image.new('RGBA', (target_w + pad * 2, target_h + pad * 2), (bg_rgb[0], bg_rgb[1], bg_rgb[2], pad_alpha))
+    # Create a subtle background pad with better blending
+    pad = max(6, target_w // 10)  # Slightly larger padding
+    bg_size = (target_w + pad * 2, target_h + pad * 2)
+    
+    # Create background with gradient for better integration
+    bg = Image.new('RGBA', bg_size, (0, 0, 0, 0))  # Start transparent
+    
+    # Create a soft circular gradient background
+    center_x, center_y = bg_size[0] // 2, bg_size[1] // 2
+    max_radius = min(bg_size) // 2
+    
+    for x in range(bg_size[0]):
+        for y in range(bg_size[1]):
+            distance = ((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5
+            if distance <= max_radius:
+                # Create soft gradient from center
+                alpha_val = int(255 * (1 - (distance / max_radius) ** 2))
+                alpha_val = max(0, min(255, alpha_val))
+                bg.putpixel((x, y), (bg_rgb[0], bg_rgb[1], bg_rgb[2], alpha_val))
+    
+    # Paste logo on the gradient background
     bg.paste(logo_resized, (pad, pad), logo_resized)
 
     # Paste centered
@@ -161,6 +197,14 @@ def _paste_logo_center(
     y = (qr_h - bg.height) // 2
     out = qr_img.convert('RGBA')
     out.paste(bg, (x, y), bg)
+    
+    # Convert back to RGB if needed to avoid transparency issues
+    if out.mode == 'RGBA':
+        # Create white background and composite
+        white_bg = Image.new('RGB', out.size, bg_rgb)
+        white_bg.paste(out, mask=out.split()[-1])  # Use alpha as mask
+        return white_bg
+    
     return out
 
 

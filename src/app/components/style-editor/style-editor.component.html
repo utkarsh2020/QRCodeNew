@@ -21,7 +21,7 @@
               />
               <div class="field-row">
                 <label for="fgHex" class="field-label">Hex Color</label>
-                <mat-form-field appearance="outline" class="color-text input-outline-fix no-floating-label">
+                <mat-form-field appearance="outline" class="color-text no-floating-label">
                   <input 
                     id="fgHex"
                     matInput 
@@ -57,7 +57,7 @@
               />
               <div class="field-row">
                 <label for="bgHex" class="field-label">Hex Color</label>
-                <mat-form-field appearance="outline" class="color-text input-outline-fix no-floating-label">
+                <mat-form-field appearance="outline" class="color-text no-floating-label">
                   <input 
                     id="bgHex"
                     matInput 
@@ -89,7 +89,7 @@
           <div class="form-row">
             <div class="field-row">
               <label id="dotStyleLabel" class="field-label">Dot Style</label>
-              <mat-form-field appearance="outline" class="select-outline-fix no-floating-label">
+              <mat-form-field appearance="outline" class="no-floating-label">
                 <mat-select [attr.aria-labelledby]="'dotStyleLabel'" [ngModel]="value.dotStyle" [ngModelOptions]="{standalone: true}" (ngModelChange)="update('dotStyle', $event)">
                   <mat-option value="square">Square</mat-option>
                   <mat-option value="rounded">Rounded</mat-option>
@@ -100,7 +100,7 @@
 
             <div class="field-row">
               <label id="eyeShapeLabel" class="field-label">Eye Shape</label>
-              <mat-form-field appearance="outline" class="select-outline-fix no-floating-label">
+              <mat-form-field appearance="outline" class="no-floating-label">
                 <mat-select [attr.aria-labelledby]="'eyeShapeLabel'" [ngModel]="value.eyeShape" [ngModelOptions]="{standalone: true}" (ngModelChange)="update('eyeShape', $event)">
                   <mat-option value="square">Square</mat-option>
                   <mat-option value="circle">Circle</mat-option>
@@ -145,7 +145,7 @@
           <div class="form-row">
             <div class="field-row">
               <label for="qrSize" class="field-label">Size (pixels)</label>
-              <mat-form-field appearance="outline" class="input-outline-fix no-floating-label">
+              <mat-form-field appearance="outline" class="no-floating-label">
                 <input 
                   id="qrSize"
                   matInput 
@@ -161,7 +161,7 @@
 
             <div class="field-row">
               <label id="errorCorrectionLabel" class="field-label">Error Correction</label>
-              <mat-form-field appearance="outline" class="select-outline-fix no-floating-label">
+              <mat-form-field appearance="outline" class="no-floating-label">
                 <mat-select [attr.aria-labelledby]="'errorCorrectionLabel'" [ngModel]="value.errorCorrection" [ngModelOptions]="{standalone: true}" (ngModelChange)="update('errorCorrection', $event)">
                   <mat-option value="L">Low (7%)</mat-option>
                   <mat-option value="M">Medium (15%)</mat-option>
@@ -174,7 +174,7 @@
 
           <div class="field-row">
             <label for="frameText" class="field-label">Frame Text (optional)</label>
-            <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+            <mat-form-field appearance="outline" class="full-width no-floating-label">
               <input 
                 id="frameText"
                 matInput 
@@ -194,7 +194,7 @@
           <div class="gradient-controls">
             <div class="field-row">
               <label id="gradientTypeLabel" class="field-label">Gradient Type</label>
-              <mat-form-field appearance="outline" class="select-outline-fix no-floating-label">
+              <mat-form-field appearance="outline" class="no-floating-label">
                 <mat-select 
                   [attr.aria-labelledby]="'gradientTypeLabel'"
                   [ngModel]="value.gradient?.type" 

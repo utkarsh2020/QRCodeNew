@@ -1,100 +1,162 @@
-<div class="min-h-screen">
+<div class="min-h-screen bg-gray-50">
   <!-- Hero Section -->
-  <section class="hero-section py-20">
-    <div class="container mx-auto px-6">
-      <div class="hero-content max-w-4xl mx-auto">
-        <h1 class="text-5xl font-bold mb-6">
-          QR Code Generator & Manager
+  <section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="hero-content max-w-5xl mx-auto text-center">
+        <div class="hero-badge">
+          <span class="badge-text">✨ Professional QR Code Solutions</span>
+        </div>
+        
+        <h1 class="hero-title">
+          Create <span class="text-gradient">Stunning QR Codes</span><br>
+          with Advanced Analytics
         </h1>
-        <p class="text-xl mb-8 text-gray-200">
-          Create, customize, and manage QR codes with advanced features including 
-          analytics, batch processing, and cloud integration.
+        
+        <p class="hero-subtitle">
+          Generate, customize, and manage QR codes with enterprise-grade features. 
+          Track performance, batch process, and integrate with cloud storage seamlessly.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        
+        <div class="hero-actions">
           <a 
             routerLink="/generate" 
             mat-raised-button 
             color="accent" 
-            class="text-lg px-8 py-3"
+            class="cta-primary"
           >
-            <mat-icon>add</mat-icon>
-            Generate QR Code
+            <mat-icon>qr_code</mat-icon>
+            Start Creating
           </a>
           <a 
             routerLink="/dashboard" 
             mat-stroked-button 
-            class="text-lg px-8 py-3 text-white border-white"
+            class="cta-secondary"
           >
             <mat-icon>dashboard</mat-icon>
             View Dashboard
           </a>
+        </div>
+
+        <!-- Feature highlights -->
+        <div class="feature-highlights">
+          <div class="highlight-item">
+            <mat-icon>palette</mat-icon>
+            <span>Advanced Customization</span>
+          </div>
+          <div class="highlight-item">
+            <mat-icon>analytics</mat-icon>
+            <span>Real-time Analytics</span>
+          </div>
+          <div class="highlight-item">
+            <mat-icon>cloud_upload</mat-icon>
+            <span>Cloud Integration</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Stats Section -->
-  <section class="py-16 bg-white">
+  <section class="stats-section">
     <div class="container mx-auto px-6">
-      <div class="stats-grid text-center">
-        <div *ngFor="let stat of stats" class="stat-item">
-          <div class="text-3xl font-bold text-blue-600 mb-2">{{ stat.value }}</div>
-          <div class="text-gray-600">{{ stat.label }}</div>
+      <div class="stats-grid">
+        <div *ngFor="let stat of stats" class="stat-card professional-card">
+          <div class="stat-icon">
+            <mat-icon>{{ stat.icon }}</mat-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ stat.value }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section class="py-20 bg-gray-50">
+  <section class="features-section">
     <div class="container mx-auto px-6">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold mb-4">Powerful Features</h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+      <div class="section-header">
+        <h2 class="section-title">Powerful Features for Every Need</h2>
+        <p class="section-subtitle">
           Everything you need to create professional QR codes with advanced 
           customization and management capabilities.
         </p>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <mat-card 
-          *ngFor="let feature of features" 
-          class="feature-card p-6 text-center cursor-pointer"
+      <div class="features-grid">
+        <div 
+          *ngFor="let feature of features; let i = index" 
+          class="feature-card professional-card"
+          [class.featured]="i === 0"
         >
-          <mat-icon class="feature-icon text-blue-600">{{ feature.icon }}</mat-icon>
-          <h3 class="text-xl font-semibold mb-3">{{ feature.title }}</h3>
-          <p class="text-gray-600">{{ feature.description }}</p>
-        </mat-card>
+          <div class="feature-icon" [class.featured-icon]="i === 0">
+            <mat-icon>{{ feature.icon }}</mat-icon>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ feature.title }}</h3>
+            <p class="feature-description">{{ feature.description }}</p>
+            <div class="feature-tags" *ngIf="feature.tags">
+              <span *ngFor="let tag of feature.tags" class="feature-tag">{{ tag }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works Section -->
+  <section class="how-it-works-section">
+    <div class="container mx-auto px-6">
+      <div class="section-header">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Get started in just three simple steps</p>
+      </div>
+
+      <div class="steps-container">
+        <div *ngFor="let step of steps; let i = index" class="step-item">
+          <div class="step-number">{{ i + 1 }}</div>
+          <div class="step-content">
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-description">{{ step.description }}</p>
+          </div>
+          <div class="step-icon">
+            <mat-icon>{{ step.icon }}</mat-icon>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="py-20 bg-blue-600 text-white">
+  <section class="cta-section gradient-bg">
     <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-6">Ready to Get Started?</h2>
-      <p class="text-xl mb-8 max-w-2xl mx-auto">
-        Join thousands of users who trust our platform for their QR code needs.
-        Create your first QR code in minutes.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a 
-          routerLink="/auth" 
-          mat-raised-button 
-          color="accent" 
-          class="text-lg px-8 py-3"
-        >
-          <mat-icon>person_add</mat-icon>
-          Sign Up Free
-        </a>
-        <a 
-          routerLink="/generate" 
-          mat-stroked-button 
-          class="text-lg px-8 py-3 text-white border-white"
-        >
-          <mat-icon>play_arrow</mat-icon>
-          Try Demo
-        </a>
+      <div class="cta-content">
+        <h2 class="cta-title">Ready to Get Started?</h2>
+        <p class="cta-subtitle">
+          Join thousands of users who trust our platform for their QR code needs.
+          Create your first QR code in minutes.
+        </p>
+        <div class="cta-actions">
+          <a 
+            routerLink="/auth" 
+            mat-raised-button 
+            color="accent" 
+            class="cta-primary"
+          >
+            <mat-icon>person_add</mat-icon>
+            Sign Up Free
+          </a>
+          <a 
+            routerLink="/generate" 
+            mat-stroked-button 
+            class="cta-secondary-white"
+          >
+            <mat-icon>play_arrow</mat-icon>
+            Try Demo
+          </a>
+        </div>
       </div>
     </div>
   </section>

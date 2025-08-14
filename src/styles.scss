@@ -13,58 +13,72 @@
   min-width: 140px;
 }
 
-/* Unsplit outlined appearance and force black borders for mat-select */
-.select-outline-fix {
-  .mdc-notched-outline__trailing {
-    display: none !important;
+/* Consistent Material Form Field Styling */
+.mat-mdc-form-field {
+  width: 100%;
+  
+  .mdc-text-field {
+    height: 56px !important;
+    
+    &.mdc-text-field--outlined {
+      .mdc-notched-outline {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(0, 0, 0, 0.38) !important;
+          border-width: 1px !important;
+        }
+      }
+      
+      &:hover .mdc-notched-outline {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: rgba(0, 0, 0, 0.6) !important;
+        }
+      }
+      
+      &.mdc-text-field--focused .mdc-notched-outline {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: #1976d2 !important;
+          border-width: 2px !important;
+        }
+      }
+    }
   }
-  .mdc-notched-outline__leading {
-    border-right-width: 0 !important;
-    border-color: #000 !important;
+  
+  .mat-mdc-select {
+    .mat-mdc-select-trigger {
+      height: 56px !important;
+      display: flex;
+      align-items: center;
+    }
   }
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__trailing {
-    border-color: #000 !important;
-  }
-  .mdc-text-field--focused .mdc-notched-outline__leading,
-  .mdc-text-field--focused .mdc-notched-outline__notch,
-  .mdc-text-field--focused .mdc-notched-outline__trailing,
-  .mdc-text-field:hover .mdc-notched-outline__leading,
-  .mdc-text-field:hover .mdc-notched-outline__notch,
-  .mdc-text-field:hover .mdc-notched-outline__trailing {
-    border-color: #000 !important;
+  
+  textarea.mat-mdc-input-element {
+    min-height: 80px;
   }
 }
 
-/* Same behavior for outlined inputs */
+/* Consistent form field appearance */
+.full-width {
+  width: 100% !important;
+}
+
+/* Remove custom outline fixes that were causing issues */
+.select-outline-fix,
 .input-outline-fix {
-  .mdc-notched-outline__trailing {
+  /* Remove custom overrides */
+}
+
+.no-floating-label {
+  .mat-mdc-form-field-label {
     display: none !important;
-  }
-  .mdc-notched-outline__leading {
-    border-right-width: 0 !important;
-    border-color: #000 !important;
-  }
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__trailing {
-    border-color: #000 !important;
-  }
-  .mdc-text-field--focused .mdc-notched-outline__leading,
-  .mdc-text-field--focused .mdc-notched-outline__notch,
-  .mdc-text-field--focused .mdc-notched-outline__trailing,
-  .mdc-text-field:hover .mdc-notched-outline__leading,
-  .mdc-text-field:hover .mdc-notched-outline__notch,
-  .mdc-text-field:hover .mdc-notched-outline__trailing {
-    border-color: #000 !important;
   }
 }
 
-/* Global dropdown panel border for mat-select */
-.mat-mdc-select-panel {
-  border: 1px solid #000 !important;
-}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -126,4 +140,31 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .spinner {
   @apply inline-block w-4 h-4 border-2 border-gray-200 border-t-blue-600 rounded-full animate-spin;
+}
+
+/* Professional styling for consistent UI */
+.professional-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
+}
+
+.professional-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-bg-alt {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
