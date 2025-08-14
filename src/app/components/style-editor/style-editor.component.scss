@@ -73,6 +73,7 @@
   width: 100%;
 }
 
+
 .slider-section {
   margin-bottom: 2rem;
 
@@ -101,4 +102,10 @@ mat-card-actions {
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
+}
+
+.no-floating-label {
+  ::ng-deep .mdc-notched-outline__notch {
+    display: none !important;
+  }
 }

@@ -41,7 +41,9 @@
         <mat-label>CSV Data</mat-label>
         <textarea 
           matInput 
-          [(ngModel)]="csvText"
+          [ngModel]="csvText()"
+          (ngModelChange)="csvText.set($event)"
+          [ngModelOptions]="{standalone: true}"
           rows="12"
           class="csv-textarea"
           placeholder="Paste your CSV data here..."
@@ -53,7 +55,11 @@
 
       <!-- Options -->
       <div class="options-section">
-        <mat-checkbox [(ngModel)]="isDynamic">
+        <mat-checkbox 
+          [ngModel]="isDynamic()" 
+          (ngModelChange)="isDynamic.set($event)"
+          [ngModelOptions]="{standalone: true}"
+        >
           Create as Dynamic QR Codes (editable content)
         </mat-checkbox>
       </div>

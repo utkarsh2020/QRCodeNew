@@ -1,3 +1,70 @@
+/* Global utility layout for external labels */
+.field-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.field-label {
+  font-size: 0.95rem;
+  color: #333;
+  white-space: nowrap;
+  min-width: 140px;
+}
+
+/* Unsplit outlined appearance and force black borders for mat-select */
+.select-outline-fix {
+  .mdc-notched-outline__trailing {
+    display: none !important;
+  }
+  .mdc-notched-outline__leading {
+    border-right-width: 0 !important;
+    border-color: #000 !important;
+  }
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__trailing {
+    border-color: #000 !important;
+  }
+  .mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--focused .mdc-notched-outline__trailing,
+  .mdc-text-field:hover .mdc-notched-outline__leading,
+  .mdc-text-field:hover .mdc-notched-outline__notch,
+  .mdc-text-field:hover .mdc-notched-outline__trailing {
+    border-color: #000 !important;
+  }
+}
+
+/* Same behavior for outlined inputs */
+.input-outline-fix {
+  .mdc-notched-outline__trailing {
+    display: none !important;
+  }
+  .mdc-notched-outline__leading {
+    border-right-width: 0 !important;
+    border-color: #000 !important;
+  }
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__trailing {
+    border-color: #000 !important;
+  }
+  .mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--focused .mdc-notched-outline__trailing,
+  .mdc-text-field:hover .mdc-notched-outline__leading,
+  .mdc-text-field:hover .mdc-notched-outline__notch,
+  .mdc-text-field:hover .mdc-notched-outline__trailing {
+    border-color: #000 !important;
+  }
+}
+
+/* Global dropdown panel border for mat-select */
+.mat-mdc-select-panel {
+  border: 1px solid #000 !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

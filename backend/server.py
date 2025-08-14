@@ -113,8 +113,30 @@ def _load_logo_image(logo_url: str) -> Optional[Image.Image]:
         return None
 
 
-def _paste_logo_center(qr_img: Image.Image, logo_img: Image.Image, ratio: float = 0.22, rounded: bool = True) -> Image.Image:
-    """Paste the logo at the center of qr_img. ratio is the logo width / qr width."""
+def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    """Convert hex color like '#fff' or '#ffffff' to an (r, g, b) tuple."""
+    s = (hex_color or '#ffffff').lstrip('#')
+    if len(s) == 3:
+        s = ''.join([c * 2 for c in s])
+    try:
+        return tuple(int(s[i:i+2], 16) for i in range(0, 6, 2))  # type: ignore[return-value]
+    except Exception:
+        return (255, 255, 255)
+
+
+def _paste_logo_center(
+    qr_img: Image.Image,
+    logo_img: Image.Image,
+    ratio: float = 0.22,
+    rounded: bool = True,
+    bg_rgb: tuple[int, int, int] = (255, 255, 255),
+    pad_alpha: int = 230,
+) -> Image.Image:
+    """Paste the logo at the center of qr_img.
+    ratio is the logo width / qr width.
+
+    bg_rgb is used for the padding background so transparent regions blend with the QR background color.
+    """
     qr_w, qr_h = qr_img.size
     target_w = int(qr_w * max(0.05, min(0.35, ratio)))
     aspect = logo_img.width / max(1, logo_img.height)
@@ -129,9 +151,9 @@ def _paste_logo_center(qr_img: Image.Image, logo_img: Image.Image, ratio: float 
         draw.rounded_rectangle([0, 0, target_w, target_h], radius=radius, fill=255)
         logo_resized.putalpha(mask)
 
-    # Optional white background pad for contrast
+    # Background pad that matches the QR background color
     pad = max(4, target_w // 12)
-    bg = Image.new('RGBA', (target_w + pad * 2, target_h + pad * 2), (255, 255, 255, 230))
+    bg = Image.new('RGBA', (target_w + pad * 2, target_h + pad * 2), (bg_rgb[0], bg_rgb[1], bg_rgb[2], pad_alpha))
     bg.paste(logo_resized, (pad, pad), logo_resized)
 
     # Paste centered
@@ -162,7 +184,8 @@ def generate_qr_png_data_url(payload: str, opts: QROptions) -> str:
     if opts.logoUrl:
         logo_img = _load_logo_image(opts.logoUrl)
         if logo_img is not None:
-            img = _paste_logo_center(img, logo_img)
+            bg_rgb = _hex_to_rgb(opts.bgColor or '#ffffff')
+            img = _paste_logo_center(img, logo_img, bg_rgb=bg_rgb)
 
     buffer = BytesIO()
     img.save(buffer, format='PNG')

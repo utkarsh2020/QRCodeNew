@@ -10,9 +10,10 @@
 
         <mat-card-content>
           <!-- QR Type Selection -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>QR Code Type</mat-label>
-            <mat-select [value]="selectedType()" (selectionChange)="onTypeChange($event.value)">
+          <div class="field-row">
+            <label id="qrTypeLabel" class="field-label">QR Code Type</label>
+            <mat-form-field appearance="outline" class="full-width select-outline-fix no-floating-label">
+              <mat-select [attr.aria-labelledby]="'qrTypeLabel'" [value]="selectedType()" (selectionChange)="onTypeChange($event.value)">
               <mat-option value="url">
                 <mat-icon>link</mat-icon>
                 Website URL
@@ -49,89 +50,110 @@
                 <mat-icon>attach_file</mat-icon>
                 File Redirect
               </mat-option>
-            </mat-select>
-          </mat-form-field>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
           <!-- Dynamic Forms for Each Type -->
           <div class="form-section">
             <!-- URL Form -->
             <form *ngIf="selectedType() === 'url'" [formGroup]="urlForm">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Website URL</mat-label>
-                <input matInput formControlName="url" placeholder="https://example.com">
-                <mat-icon matSuffix>link</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="urlInput" class="field-label">Website URL</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="urlInput" matInput formControlName="url" placeholder="https://example.com">
+                  <mat-icon matSuffix>link</mat-icon>
+                </mat-form-field>
+              </div>
               <app-error-messages [control]="urlForm.get('url')" fieldName="URL"></app-error-messages>
             </form>
 
             <!-- Text Form -->
             <form *ngIf="selectedType() === 'text'" [formGroup]="textForm">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Text Content</mat-label>
-                <textarea matInput formControlName="text" rows="4" placeholder="Enter your text here"></textarea>
-                <mat-icon matSuffix>text_fields</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="textContent" class="field-label">Text Content</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <textarea id="textContent" matInput formControlName="text" rows="4" placeholder="Enter your text here"></textarea>
+                  <mat-icon matSuffix>text_fields</mat-icon>
+                </mat-form-field>
+              </div>
               <app-error-messages [control]="textForm.get('text')" fieldName="Text"></app-error-messages>
             </form>
 
             <!-- Email Form -->
             <form *ngIf="selectedType() === 'email'" [formGroup]="emailForm">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Recipient Email</mat-label>
-                <input matInput type="email" formControlName="to" placeholder="recipient@example.com">
-                <mat-icon matSuffix>email</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="emailTo" class="field-label">Recipient Email</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="emailTo" matInput type="email" formControlName="to" placeholder="recipient@example.com">
+                  <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+              </div>
               <app-error-messages [control]="emailForm.get('to')" fieldName="Email"></app-error-messages>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Subject (optional)</mat-label>
-                <input matInput formControlName="subject" placeholder="Email subject">
-              </mat-form-field>
+              <div class="field-row">
+                <label for="emailSubject" class="field-label">Subject (optional)</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="emailSubject" matInput formControlName="subject" placeholder="Email subject">
+                </mat-form-field>
+              </div>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Message (optional)</mat-label>
-                <textarea matInput formControlName="body" rows="3" placeholder="Email message"></textarea>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="emailBody" class="field-label">Message (optional)</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <textarea id="emailBody" matInput formControlName="body" rows="3" placeholder="Email message"></textarea>
+                </mat-form-field>
+              </div>
             </form>
 
             <!-- SMS Form -->
             <form *ngIf="selectedType() === 'sms'" [formGroup]="smsForm">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Phone Number</mat-label>
-                <input matInput formControlName="phone" placeholder="+1234567890">
-                <mat-icon matSuffix>phone</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="smsPhone" class="field-label">Phone Number</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="smsPhone" matInput formControlName="phone" placeholder="+1234567890">
+                  <mat-icon matSuffix>phone</mat-icon>
+                </mat-form-field>
+              </div>
               <app-error-messages [control]="smsForm.get('phone')" fieldName="Phone"></app-error-messages>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Message (optional)</mat-label>
-                <textarea matInput formControlName="message" rows="3" placeholder="SMS message"></textarea>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="smsMessage" class="field-label">Message (optional)</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <textarea id="smsMessage" matInput formControlName="message" rows="3" placeholder="SMS message"></textarea>
+                </mat-form-field>
+              </div>
             </form>
 
             <!-- WiFi Form -->
             <form *ngIf="selectedType() === 'wifi'" [formGroup]="wifiForm">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Network Name (SSID)</mat-label>
-                <input matInput formControlName="ssid" placeholder="MyWiFi">
-                <mat-icon matSuffix>wifi</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="wifiSsid" class="field-label">Network Name (SSID)</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="wifiSsid" matInput formControlName="ssid" placeholder="MyWiFi">
+                  <mat-icon matSuffix>wifi</mat-icon>
+                </mat-form-field>
+              </div>
               <app-error-messages [control]="wifiForm.get('ssid')" fieldName="SSID"></app-error-messages>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Password</mat-label>
-                <input matInput type="password" formControlName="password" placeholder="WiFi password">
-                <mat-icon matSuffix>lock</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="wifiPwd" class="field-label">Password</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="wifiPwd" matInput type="password" formControlName="password" placeholder="WiFi password">
+                  <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+              </div>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Security Type</mat-label>
-                <mat-select formControlName="encryption">
-                  <mat-option value="WPA">WPA/WPA2</mat-option>
-                  <mat-option value="WEP">WEP</mat-option>
-                  <mat-option value="nopass">No Password</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <div class="field-row">
+                <label id="wifiEncLabel" class="field-label">Security Type</label>
+                <mat-form-field appearance="outline" class="full-width select-outline-fix no-floating-label">
+                  <mat-select [attr.aria-labelledby]="'wifiEncLabel'" formControlName="encryption">
+                    <mat-option value="WPA">WPA/WPA2</mat-option>
+                    <mat-option value="WEP">WEP</mat-option>
+                    <mat-option value="nopass">No Password</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
               <mat-checkbox formControlName="hidden">Hidden Network</mat-checkbox>
             </form>
@@ -218,13 +240,15 @@
 
             <!-- Payment Form -->
             <form *ngIf="selectedType() === 'payment'" [formGroup]="paymentForm">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Payment Method</mat-label>
-                <mat-select formControlName="method">
-                  <mat-option value="upi">UPI (India)</mat-option>
-                  <mat-option value="paypal">PayPal</mat-option>
-                </mat-select>
-              </mat-form-field>
+              <div class="field-row">
+                <label id="paymentMethodLabel" class="field-label">Payment Method</label>
+                <mat-form-field appearance="outline" class="full-width select-outline-fix no-floating-label">
+                  <mat-select [attr.aria-labelledby]="'paymentMethodLabel'" formControlName="method">
+                    <mat-option value="upi">UPI (India)</mat-option>
+                    <mat-option value="paypal">PayPal</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
               <!-- UPI Fields -->
               <div *ngIf="paymentForm.get('method')?.value === 'upi'">
@@ -243,27 +267,33 @@
                   <mat-icon matSuffix>paypal</mat-icon>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Currency</mat-label>
-                  <mat-select formControlName="currency">
-                    <mat-option value="USD">USD</mat-option>
-                    <mat-option value="EUR">EUR</mat-option>
-                    <mat-option value="GBP">GBP</mat-option>
-                    <mat-option value="INR">INR</mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <div class="field-row">
+                  <label id="currencyLabel" class="field-label">Currency</label>
+                  <mat-form-field appearance="outline" class="full-width select-outline-fix no-floating-label">
+                    <mat-select [attr.aria-labelledby]="'currencyLabel'" formControlName="currency">
+                      <mat-option value="USD">USD</mat-option>
+                      <mat-option value="EUR">EUR</mat-option>
+                      <mat-option value="GBP">GBP</mat-option>
+                      <mat-option value="INR">INR</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
               </div>
 
               <div class="form-row">
-                <mat-form-field appearance="outline">
-                  <mat-label>Amount</mat-label>
-                  <input matInput type="number" min="0" step="0.01" formControlName="amount" placeholder="0.00">
-                  <mat-icon matSuffix>attach_money</mat-icon>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>Note</mat-label>
-                  <input matInput formControlName="note" placeholder="Payment for...">
-                </mat-form-field>
+                <div class="field-row">
+                  <label for="payAmount" class="field-label">Amount</label>
+                  <mat-form-field appearance="outline" class="input-outline-fix no-floating-label">
+                    <input id="payAmount" matInput type="number" min="0" step="0.01" formControlName="amount" placeholder="0.00">
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="field-row">
+                  <label for="payNote" class="field-label">Note</label>
+                  <mat-form-field appearance="outline" class="input-outline-fix no-floating-label">
+                    <input id="payNote" matInput formControlName="note" placeholder="Payment for...">
+                  </mat-form-field>
+                </div>
               </div>
             </form>
 
@@ -288,26 +318,32 @@
                 </button>
               </div>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>File URL</mat-label>
-                <input matInput formControlName="fileUrl" readonly>
-                <mat-icon matSuffix>link</mat-icon>
-              </mat-form-field>
+              <div class="field-row">
+                <label for="fileUrl" class="field-label">File URL</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="fileUrl" matInput formControlName="fileUrl" readonly>
+                  <mat-icon matSuffix>link</mat-icon>
+                </mat-form-field>
+              </div>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Display Name (optional)</mat-label>
-                <input matInput formControlName="filename" placeholder="My Document.pdf">
-              </mat-form-field>
+              <div class="field-row">
+                <label for="fileName" class="field-label">Display Name (optional)</label>
+                <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                  <input id="fileName" matInput formControlName="filename" placeholder="My Document.pdf">
+                </mat-form-field>
+              </div>
             </form>
           </div>
 
           <!-- General Settings -->
           <form [formGroup]="generalForm" class="general-settings">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Title (optional)</mat-label>
-              <input matInput formControlName="title" placeholder="My QR Code">
-              <mat-icon matSuffix>title</mat-icon>
-            </mat-form-field>
+            <div class="field-row">
+              <label for="qrTitle" class="field-label">Title (optional)</label>
+              <mat-form-field appearance="outline" class="full-width input-outline-fix no-floating-label">
+                <input id="qrTitle" matInput formControlName="title" placeholder="My QR Code">
+                <mat-icon matSuffix>title</mat-icon>
+              </mat-form-field>
+            </div>
 
             <mat-checkbox 
               [checked]="isDynamic()" 
@@ -374,14 +410,17 @@
 
     <!-- Right Panel - Preview and Results -->
     <div class="preview-panel">
-      <!-- Live Preview -->
       <mat-card class="preview-card">
         <mat-card-header>
-          <mat-card-title>Live Preview</mat-card-title>
+          <mat-card-title>{{ generatedImageDataUrl() ? 'Generated QR Code' : 'Live Preview' }}</mat-card-title>
+          <mat-card-subtitle *ngIf="generatedImageDataUrl()">
+            {{ isDynamic() ? 'Dynamic QR Code' : 'Static QR Code' }}
+          </mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
-          <div class="qr-preview">
+          <!-- Show live preview only when not generating and not yet generated -->
+          <div class="qr-preview" *ngIf="!generatedImageDataUrl() && !isGenerating(); else generatedBlock">
             <qrcode
               [qrdata]="previewData()"
               [width]="options().width || 256"
@@ -395,43 +434,42 @@
               {{ options().frameText }}
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
 
-      <!-- Generated Result -->
-      <mat-card *ngIf="generatedImageDataUrl()" class="result-card">
-        <mat-card-header>
-          <mat-card-title>Generated QR Code</mat-card-title>
-          <mat-card-subtitle>
-            {{ isDynamic() ? 'Dynamic QR Code' : 'Static QR Code' }}
-          </mat-card-subtitle>
-        </mat-card-header>
-
-        <mat-card-content>
-          <div class="generated-qr">
-            <img 
-              [src]="generatedImageDataUrl()" 
-              [alt]="'Generated QR Code'"
-              [style.width.px]="getImageWidth(options().width || 256, 300)"
-            >
-
-            <div *ngIf="generatedShortUrl()" class="short-url">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Short URL</mat-label>
-                <input matInput [value]="generatedShortUrl()" readonly>
-                <button 
-                  matSuffix 
-                  mat-icon-button 
-                  (click)="copyToClipboard(generatedShortUrl()!)"
-                >
-                  <mat-icon>content_copy</mat-icon>
-                </button>
-              </mat-form-field>
+          <ng-template #generatedBlock>
+            <!-- While generating and image not ready, show centered spinner -->
+            <div class="generated-qr" *ngIf="isGenerating() && !generatedImageDataUrl(); else showImage">
+              <div class="flex items-center justify-center" style="min-height: 280px">
+                <mat-spinner diameter="40"></mat-spinner>
+              </div>
             </div>
-          </div>
+
+            <ng-template #showImage>
+              <div class="generated-qr">
+                <img 
+                  [src]="generatedImageDataUrl()" 
+                  [alt]="'Generated QR Code'"
+                  [style.width.px]="getImageWidth(options().width || 256, 300)"
+                >
+
+                <div *ngIf="generatedShortUrl()" class="short-url">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Short URL</mat-label>
+                    <input matInput [value]="generatedShortUrl()" readonly>
+                    <button 
+                      matSuffix 
+                      mat-icon-button 
+                      (click)="copyToClipboard(generatedShortUrl()!)"
+                    >
+                      <mat-icon>content_copy</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-template>
+          </ng-template>
         </mat-card-content>
 
-        <mat-card-actions>
+        <mat-card-actions *ngIf="generatedImageDataUrl()">
           <button mat-button (click)="download('png')">
             <mat-icon>download</mat-icon>
             PNG

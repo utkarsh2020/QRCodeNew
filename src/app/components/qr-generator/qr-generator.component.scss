@@ -4,6 +4,7 @@
   margin: 0 auto;
 }
 
+
 .generator-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -24,6 +25,7 @@
 .full-width {
   width: 100%;
 }
+
 
 .form-section {
   margin: 1rem 0;
@@ -153,6 +155,15 @@ mat-card-actions {
     }
   }
 }
+
+
+// Ensure notch space is not reserved when using external labels
+.no-floating-label {
+  ::ng-deep .mdc-notched-outline__notch {
+    display: none !important;
+  }
+}
+
 
 // Spinner positioning
 .mr-2 {
